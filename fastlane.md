@@ -36,11 +36,16 @@ delivery from a local machine.
 
 1. Install Fastlane `gem install fastlane` or `brew cask install fastlane`.
 
+1. 通过`gem install fastlane`或`brew cask install fastlane`安装Fastlane。
 
 1. Create your Flutter project, and when ready, make sure that your project builds via
     * ![Android](/images/fastlane-cd/android.png) `flutter build apk --release`; and
     * ![iOS](/images/fastlane-cd/ios.png) `flutter build ios --release --no-codesign`.
 
+1. 创建Flutter项目，项目完成，确保项目能编译通过
+    * ![Android](/images/fastlane-cd/android.png) `flutter build apk --release`; 
+    * ![iOS](/images/fastlane-cd/ios.png) `flutter build ios --release --no-codesign`.
+  
 
 
 1. Initialize the Fastlane projects for each platform.
@@ -48,6 +53,12 @@ delivery from a local machine.
     directory, run `fastlane init`.
     * ![iOS](/images/fastlane-cd/ios.png) In your `[project]/ios` directory,
     run `fastlane init`.
+
+1. 为不同平台初始化Fastlane工程
+    *！[Android]（/ images / fastlane-cd / android.png）在你的`[project] / android`中
+    目录，运行`fastlane init`。
+    *！[iOS]（/ images / fastlane-cd / ios.png）在你的`[project] / ios`目录中，
+    运行`fastlane init`。
 
 
 1. Edit the `Appfile`s to ensure they have adequate metadata for your app.
