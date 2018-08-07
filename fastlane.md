@@ -10,7 +10,7 @@ Follow continuous delivery best practices with Flutter to make sure your
 application is delivered to your beta testers and validated on a frequent basis
 without resorting to manual workflows.
 
-遵循持续交付最佳实践以确保您的Flutter应用将交付给您beta版本给测试人员，
+Flutter遵循持续交付最佳实践能确保您的应用在验收测试时能快速生效并且不需要手动工作流，
 
 
 
@@ -18,7 +18,7 @@ This guide shows how to integrate [Fastlane](https://docs.fastlane.tools/), an
 open-source tool suite, with your existing testing and continuous integration
 (CI) workflows (for example, Travis or Cirrus).
 
-本指南介绍如何集成[Fastlane]（https://docs.fastlane.tools/）,一个开源工具套件，具有您现有的测试和持续集成 （CI）工作流程（例如，Travis或Cirrus）。
+本指南介绍如何集成[Fastlane]（https://docs.fastlane.tools/）,一个开源工具套件，具有您现有的测试和持续集成 （CI）工作流（类似的还有 Travis和 Cirrus）。
 
 
 
@@ -31,18 +31,19 @@ It's recommended that you test the build and deployment process locally before
 migrating to a cloud-based system. You could also choose to perform continuous
 delivery from a local machine.
 
+建议你在迁移到云端系统之前先在本地测试一遍构建和部署流程。您也可以设置持续交付在本地执行。
 
 
 
 1. Install Fastlane `gem install fastlane` or `brew cask install fastlane`.
 
-1. 通过`gem install fastlane`或`brew cask install fastlane`安装Fastlane。
+1. 通过`gem install fastlane`或`brew cask install fastlane`命令安装Fastlane。
 
 1. Create your Flutter project, and when ready, make sure that your project builds via
     * ![Android](/images/fastlane-cd/android.png) `flutter build apk --release`; and
     * ![iOS](/images/fastlane-cd/ios.png) `flutter build ios --release --no-codesign`.
 
-1. 创建Flutter项目，项目完成，确保项目能编译通过
+1. 创建Flutter项目后，一切准备完毕，执行以下指令确保项目编译通过
     * ![Android](/images/fastlane-cd/android.png) `flutter build apk --release`; 
     * ![iOS](/images/fastlane-cd/ios.png) `flutter build ios --release --no-codesign`.
   
@@ -54,10 +55,10 @@ delivery from a local machine.
     * ![iOS](/images/fastlane-cd/ios.png) In your `[project]/ios` directory,
     run `fastlane init`.
 
-1. 为不同平台初始化Fastlane工程
-    *！[Android]（/ images / fastlane-cd / android.png）在你的`[project] / android`中
-    目录，运行`fastlane init`。
-    *！[iOS]（/ images / fastlane-cd / ios.png）在你的`[project] / ios`目录中，
+1. 初始化不同平台的Fastlane工程。
+    *![Android](/images/fastlane-cd/android.png)在你的`[project]/android`
+    目录下，运行`fastlane init`。
+    *![iOS](/images/fastlane-cd/ios.png)在你的`[project]/ios`目录下，
     运行`fastlane init`。
 
 
@@ -68,73 +69,98 @@ delivery from a local machine.
     `[project]/ios/Appfile` also matches. Fill in `apple_id`, `itc_team_id`,
     `team_id` with your respective account info.
 
+编辑Appfile文件，确保他们有提供合适的元素对您的应用。
+
+ * ![Android](/images/fastlane-cd/android.png)检查`[project]/android/Appfile`里的`package_name`和在pubspec.yaml里的包名一致。
+
+* ![iOS](/images/fastlane-cd/ios.png) 检查`[project]/ios/Appfile`和`app_identifier`的一致。填写个人账户信息`apple_id`, `itc_team_id`,`team_id`。
+
 
 1. Set up your local login credentials for the stores.
+
     * ![Android](/images/fastlane-cd/android.png) Follow the [Supply setup steps](https://docs.fastlane.tools/getting-started/android/setup/#setting-up-supply)
     and ensure that `fastlane supply init` successfully syncs data from your
     Play Store console. _Treat the .json file like your password and do not check
     it into any public source control repositories._
+
     * ![iOS](/images/fastlane-cd/ios.png) Your iTunes Connect username is already
     in your `Appfile`'s `apple_id` field. Set the `FASTLANE_PASSWORD` shell
     environment variable with your iTunes Connect password. Otherwise, you'll be
     prompted when uploading to iTunes/TestFlight.
 
+1. 设置应用商店的登录凭证。
+
+ * ![Android](/images/fastlane-cd/android.png)按照[设置步骤](https://docs.fastlane.tools/getting-started/android/setup/#setting-up-supply)确保`fastlane supply init`成功同步在您的应用商店控制台。把.json文件像你的密码一样对待，不要上传到任何公共的代码仓库。
+
+* ![iOS](/images/fastlane-cd/ios.png) 你的iTunes链接用户名已经在你的'Appfile的'apple_id字段中。设置`FASTLANE_PASSWORD`shell环境变量与您的iTunes Connect密码。否则，你上传到iTunes / TestFlight会得到提示。
+
 
 
 1. Set up code signing.
+
+1.设置代码签名。
+
     * ![Android](/images/fastlane-cd/android.png) On Android, there are two
     signing keys: deployment and upload. The end-users download the .apk signed
     with the 'deployment key'. An 'upload key' is used to authenticate the .apk
     uploaded by developers onto the Play Store and is re-signed with the
     deployment key once in the Play Store.
 
+* ![Android](/images/fastlane-cd/android.png) 在Android中，有两种签名密钥:部署和上传。最终用户下载的apk签的是“部署密钥”。“上传密钥”用于验证开发人员上传apk到应用商店和在应用商店重新签名。
 
 
         * It's highly recommended to use the automatic cloud managed signing for
         the deployment key. For more information, see the [official Play Store documentation](https://support.google.com/googleplay/android-developer/answer/7384423?hl=en).
-
+*强烈建议使用自动云托管签名 部署密钥。更多详细信息，请参阅[官方应用商店文档](https://support.google.com/googleplay/android-developer/answer/7384423?hl=en)。
 
 
         * Follow the [key generation steps](https://developer.android.com/studio/publish/app-signing#sign-apk)
         to create your upload key.
-
+* 按照[密钥生成步骤](https://developer.android.com/studio/publish/app-signing#sign-apk)创建上传密钥。
 
 
         * Configure gradle to use your upload key when building your app in
         release mode by editing `android.buildTypes.release` in
         `[project]/android/app/build.gradle`.
-
+*在gradle配置在release模式下使用上传密钥构建app，通过编辑`[project]/android/app/build.gradle`里的android.buildTypes.release。
 
 
     * ![iOS](/images/fastlane-cd/ios.png) On iOS, create and sign using a
     distribution certificate instead of a development certificate when you're
     ready to test and deploy using TestFlight or App Store.
 
+  * ![iOS](/images/fastlane-cd/ios.png)在iOS上，当你准备通过TestFlight和App Store 测试和部署时应该用发行证书而不是开发证书。
 
         * Create and download a distribution certificate in your [Apple Developer Account console](https://developer.apple.com/account/ios/certificate/).
-
+创建和下载一个发布证书在你的[Apple Developer Account console](https://developer.apple.com/account/ios/certificate/)。
 
         * `open [project]/ios/Runner.xcworkspace/` and select the distribution
         certificate in your target's settings pane.
+
+*  `open [project]/ios/Runner.xcworkspace/`和选择发布证书在你setting面板。
 
 
 
 1. Create a `Fastfile` script for each platform.
 
+1. 为不同平台创建一个Fastfile脚本。
 
     * ![Android](/images/fastlane-cd/android.png) On Android, follow the
     [Fastlane Android beta deployment guide](https://docs.fastlane.tools/getting-started/android/beta-deployment/).
 
+* ![Android](/images/fastlane-cd/android.png) 按照 [Fastlane Android beta版部署指南](https://docs.fastlane.tools/getting-started/android/beta-deployment/)。
 
     Your edit could be as simple as adding a `lane` that calls `upload_to_play_store`.
-
+你的编辑可以像通过调用`upload_to_play_store`添加一个`lane`一样简单。
 
     Set the `apk` argument to `../build/app/outputs/apk/release/app-release.apk`
     to use the apk `flutter build` already built.
 
+ 将apk参数设置到`../build/app/outputs/apk/release/app-release.apk`用`flutter build`来用已经编译好的apk。
+
 
     * ![iOS](/images/fastlane-cd/ios.png) On iOS, follow the [Fastlane iOS beta deployment guide](https://docs.fastlane.tools/getting-started/ios/beta-deployment/).
-
+* ![iOS](/images/fastlane-cd/ios.png)在iOS，依照[Fastlane iOS beta版部署指南](https://docs.fastlane.tools/getting-started/ios/beta-deployment/)。
 
 
     Your edit could be as simple as adding a `lane` that calls `build_ios_app` with
@@ -142,22 +168,25 @@ delivery from a local machine.
     build is required since `flutter build` builds an .app rather than archiving
     .ipas for release.
 
+你可以向添加一个`lane`一样简单编辑调用`build_ios_app`
+
 
 
 
 You're now ready to perform deployments locally or migrate the deployment
 process to a continuous integration (CI) system.
 
+现在您已准备好在本地执行部署或迁移部署 过程到持续集成（CI）系统。
 
 
 
 ## Running deployment locally
-
+在本地运行部署
 
 
 
 1. Build the release mode app.
-
+1.构建release模式应用程序。
 
     * ![Android](/images/fastlane-cd/android.png) `flutter build apk --release`.
 
