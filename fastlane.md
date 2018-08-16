@@ -199,6 +199,8 @@ process to a continuous integration (CI) system.
 
 1. Run the Fastfile script on each platform.
 
+在不同的平台下运行Fastfile脚本
+
 
     * ![Android](/images/fastlane-cd/android.png) `cd android` then
     `fastlane [name of the lane you created]`.
@@ -267,7 +269,8 @@ secrets in pull requests that you accept and merge.
 
 
         * Move the local environment variable `FASTLANE_PASSWORD` to use
-        encrypted environment variables on the CI system.
+        encrypted environment variables on the CI system
+.
 
 
         * The CI system needs access to your distribution certificate. Fastlane's
@@ -335,19 +338,22 @@ repository root.
          path is set.
 
 
-         * Run `bundle install` in `[project]/android` or `[project]/ios`.
 
+         * Run `bundle install` in `[project]/android` or `[project]/ios`.
+ android的在`[project]/android`目录下运行`bundle install`
 
          * Make sure the Flutter SDK is available and set in `PATH`.
-
+确保`PATH`配置了Flutter SDK的地址可用。
 
     * In the script phase of the CI task:
 
-
+在执行CI任务脚本解析
          * Run `flutter build apk --release` or `flutter build ios --release --no-codesign` depending on the platform.
+根据不同依赖的平台，在Android下运行`flutter build apk --release`，在iOS下运行`flutter build ios --release --no-codesign`。
 
 
          * `cd android` or `cd ios`.
+
 
 
          * `bundle exec fastlane [name of the lane]`.
