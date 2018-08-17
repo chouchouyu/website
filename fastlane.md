@@ -1,7 +1,7 @@
 ---
 layout: page
-title: 通过fastlane持续交付
-description: 如何通过Fastlane自动连续构建和发布Flutter应用程序。
+title: 通过fastlane实现Flutter应用的持续交付
+description: 介绍如何通过Fastlane自动化连续构建和发布Flutter应用程序。
 
 permalink: /fastlane-cd/
 ---
@@ -10,7 +10,7 @@ Follow continuous delivery best practices with Flutter to make sure your
 application is delivered to your beta testers and validated on a frequent basis
 without resorting to manual workflows.
 
-Flutter遵循持续交付最佳实践能确保您的应用在验收测试时能快速生效并且不需要手动工作流，
+下面介绍的Flutter持续交付最佳实践能确保您的应用能持续beta提测时能快速生效并且不需要介入手动操作，
 
 
 
@@ -18,7 +18,7 @@ This guide shows how to integrate [Fastlane](https://docs.fastlane.tools/), an
 open-source tool suite, with your existing testing and continuous integration
 (CI) workflows (for example, Travis or Cirrus).
 
-本指南介绍如何集成[Fastlane]（https://docs.fastlane.tools/）,一个开源工具套件，具有您现有的测试和持续集成 （CI）工作流（类似的还有 Travis和 Cirrus）。
+本指南介绍如何集成[Fastlane]（https://docs.fastlane.tools/）,一个开源工具套件，提供现成的的测试和持续集成 （CI）工作流（类似的还有 Travis和 Cirrus）。
 
 
 
@@ -31,19 +31,22 @@ It's recommended that you test the build and deployment process locally before
 migrating to a cloud-based system. You could also choose to perform continuous
 delivery from a local machine.
 
-建议你在迁移到云端系统之前先在本地测试一遍构建和部署流程。您也可以设置持续交付在本地执行。
+建议先在本地环境构建和部署流程再迁移到云端系统。您也可以选择本地持续交付。
 
 
 
 1. Install Fastlane `gem install fastlane` or `brew cask install fastlane`.
+ 
 
-1. 通过`gem install fastlane`或`brew cask install fastlane`命令安装Fastlane。
+1. 通过`gem install fastlane`或`brew cask install fastlane`指令安装Fastlane。
+
+
 
 1. Create your Flutter project, and when ready, make sure that your project builds via
     * ![Android](/images/fastlane-cd/android.png) `flutter build apk --release`; and
     * ![iOS](/images/fastlane-cd/ios.png) `flutter build ios --release --no-codesign`.
 
-1. 创建Flutter项目后，一切准备完毕，执行以下指令确保项目编译通过
+1. 创建Flutter项目后，开发完成后，执行以下指令确保项目编译通过。
     * ![Android](/images/fastlane-cd/android.png) `flutter build apk --release`; 
     * ![iOS](/images/fastlane-cd/ios.png) `flutter build ios --release --no-codesign`.
   
@@ -55,7 +58,7 @@ delivery from a local machine.
     * ![iOS](/images/fastlane-cd/ios.png) In your `[project]/ios` directory,
     run `fastlane init`.
 
-1. 初始化不同平台的Fastlane工程。
+1. 初始化Fastlane项目。
     *![Android](/images/fastlane-cd/android.png)在你的`[project]/android`
     目录下，运行`fastlane init`。
     *![iOS](/images/fastlane-cd/ios.png)在你的`[project]/ios`目录下，
@@ -69,11 +72,11 @@ delivery from a local machine.
     `[project]/ios/Appfile` also matches. Fill in `apple_id`, `itc_team_id`,
     `team_id` with your respective account info.
 
-编辑Appfile文件，确保他们有提供合适的元素对您的应用。
+检查Appfile文件，确保里面有合适字段来描述你的应用。
 
- * ![Android](/images/fastlane-cd/android.png)检查`[project]/android/Appfile`里的`package_name`和在pubspec.yaml里的包名一致。
+ * ![Android](/images/fastlane-cd/android.png)`[project]/android/Appfile`里的`package_name`要和pubspec.yaml里的包名相匹配。
 
-* ![iOS](/images/fastlane-cd/ios.png) 检查`[project]/ios/Appfile`和`app_identifier`的一致。填写个人账户信息`apple_id`, `itc_team_id`,`team_id`。
+* ![iOS](/images/fastlane-cd/ios.png) `[project]/ios/Appfile`里`app_identifier`字段也能匹配得上。并填写和个人账户信息相关的：`apple_id`, `itc_team_id`,`team_id`。
 
 
 1. Set up your local login credentials for the stores.
@@ -88,11 +91,11 @@ delivery from a local machine.
     environment variable with your iTunes Connect password. Otherwise, you'll be
     prompted when uploading to iTunes/TestFlight.
 
-1. 设置应用商店的登录凭证。
+1. 设置发布到应用商店的本地签名文件。
 
- * ![Android](/images/fastlane-cd/android.png)按照[设置步骤](https://docs.fastlane.tools/getting-started/android/setup/#setting-up-supply)确保`fastlane supply init`成功同步在您的应用商店控制台。把.json文件像你的密码一样对待，不要上传到任何公共的代码仓库。
+ * ![Android](/images/fastlane-cd/android.png)按照文章[“设置步骤”](https://docs.fastlane.tools/getting-started/android/setup/#setting-up-supply)确保`fastlane supply init`指令成功同步了您在应用商店的数据。把.json文件像密码一样对待，不要提交到任何公共代码仓库。
 
-* ![iOS](/images/fastlane-cd/ios.png) 你的iTunes链接用户名已经在你的'Appfile的'apple_id字段中。设置`FASTLANE_PASSWORD`shell环境变量与您的iTunes Connect密码。否则，你上传到iTunes / TestFlight会得到提示。
+* ![iOS](/images/fastlane-cd/ios.png) 你的连接到iTunes的用户名已经保存在'Appfile里的'apple_id字段。设置`FASTLANE_PASSWORD` shell环境变量为你的iTunes连接密码。否则，当你上传到iTunes / TestFlight时会得到提示。
 
 
 
@@ -106,38 +109,39 @@ delivery from a local machine.
     uploaded by developers onto the Play Store and is re-signed with the
     deployment key once in the Play Store.
 
-* ![Android](/images/fastlane-cd/android.png) 在Android中，有两种签名密钥:部署和上传。最终用户下载的apk签的是“部署密钥”。“上传密钥”用于验证开发人员上传apk到应用商店和在应用商店重新签名。
+* ![Android](/images/fastlane-cd/android.png) 在Android中，分为两种类型的签名密钥:部署密钥和上传密钥。最终用户下载的apk签的是“部署密钥”。“上传密钥”用作开发人员上传apk在应用商店已经部署过的应用 和在应用商店重新签名时的权限验证。
 
 
         * It's highly recommended to use the automatic cloud managed signing for
         the deployment key. For more information, see the [official Play Store documentation](https://support.google.com/googleplay/android-developer/answer/7384423?hl=en).
-*强烈建议使用自动云托管签名 部署密钥。更多详细信息，请参阅[官方应用商店文档](https://support.google.com/googleplay/android-developer/answer/7384423?hl=en)。
+*强烈建议通过云自动托管签名的部署密钥。更多详细信息，请参阅-[官方应用商店文档](https://support.google.com/googleplay/android-developer/answer/7384423?hl=en)。
 
 
         * Follow the [key generation steps](https://developer.android.com/studio/publish/app-signing#sign-apk)
         to create your upload key.
-* 按照[密钥生成步骤](https://developer.android.com/studio/publish/app-signing#sign-apk)创建上传密钥。
+* 按照[密钥生成步骤](https://developer.android.com/studio/publish/app-signing#sign-apk)创建和上传密钥。
 
 
-        * Configure gradle to use your upload key when building your app in
+* Configure gradle to use your upload key when building your app in
         release mode by editing `android.buildTypes.release` in
         `[project]/android/app/build.gradle`.
-*在gradle配置在release模式下使用上传密钥构建app，通过编辑`[project]/android/app/build.gradle`里的android.buildTypes.release。
+*在gradle配置中设置release模式下通过上传密钥构建app，通过编辑`[project]/android/app/build.gradle`里的android.buildTypes.release。
 
 
     * ![iOS](/images/fastlane-cd/ios.png) On iOS, create and sign using a
     distribution certificate instead of a development certificate when you're
     ready to test and deploy using TestFlight or App Store.
 
-  * ![iOS](/images/fastlane-cd/ios.png)在iOS上，当你准备通过TestFlight和App Store 测试和部署时应该用发行证书而不是开发证书。
+  * ![iOS](/images/fastlane-cd/ios.png)在iOS上，当你准备用TestFlight或App Store测试和部署应用时用的应该是发行证书而不是开发证书。
 
-        * Create and download a distribution certificate in your [Apple Developer Account console](https://developer.apple.com/account/ios/certificate/).
-创建和下载一个发布证书在你的[Apple Developer Account console](https://developer.apple.com/account/ios/certificate/)。
+        * Create and download a distribution certificate in your [Apple开发者账户控制台](https://developer.apple.com/account/ios/certificate/).
+
+在你的[Apple开发者账户控制台](https://developer.apple.com/account/ios/certificate/)创建和下载发行证书。
 
         * `open [project]/ios/Runner.xcworkspace/` and select the distribution
         certificate in your target's settings pane.
 
-*  `open [project]/ios/Runner.xcworkspace/`和选择发布证书在你setting面板。
+*  打开 `[project]/ios/Runner.xcworkspace/`选择发布证书在你setting面板。
 
 
 
@@ -151,7 +155,7 @@ delivery from a local machine.
 * ![Android](/images/fastlane-cd/android.png) 按照 [Fastlane Android beta版部署指南](https://docs.fastlane.tools/getting-started/android/beta-deployment/)。
 
     Your edit could be as simple as adding a `lane` that calls `upload_to_play_store`.
-你的编辑可以像通过调用`upload_to_play_store`添加一个`lane`一样简单。
+你的编辑可以添加一个`lane`调用`upload_to_play_store`一样简单。
 
     Set the `apk` argument to `../build/app/outputs/apk/release/app-release.apk`
     to use the apk `flutter build` already built.
@@ -160,7 +164,8 @@ delivery from a local machine.
 
 
     * ![iOS](/images/fastlane-cd/ios.png) On iOS, follow the [Fastlane iOS beta deployment guide](https://docs.fastlane.tools/getting-started/ios/beta-deployment/).
-* ![iOS](/images/fastlane-cd/ios.png)在iOS，依照[Fastlane iOS beta版部署指南](https://docs.fastlane.tools/getting-started/ios/beta-deployment/)。
+
+* ![iOS](/images/fastlane-cd/ios.png)在iOS，根据[Fastlane iOS beta版部署指南](https://docs.fastlane.tools/getting-started/ios/beta-deployment/)一步步操作。
 
 
     Your edit could be as simple as adding a `lane` that calls `build_ios_app` with
@@ -169,7 +174,7 @@ delivery from a local machine.
     .ipas for release.
 
 你可以向添加一个`lane`一样简单编辑调用`build_ios_app`
-
+在iOS一个额外的编译是被需要的自从`flutter build`构建一个.app而不是 存档一个release版的.ipa。
 
 
 
@@ -195,7 +200,7 @@ process to a continuous integration (CI) system.
 
 
     No need to sign now since Fastlane will sign when archiving.
-
+	这个阶段不需要签名，Fastlane将在归档时签名。
 
 1. Run the Fastfile script on each platform.
 
@@ -213,12 +218,13 @@ process to a continuous integration (CI) system.
 
 ## Cloud build and deploy setup
 
+配置云构建和云部署
 
 
 First, follow the local setup section described in 'Local setup' to make sure
 the process works before migrating onto a cloud system like Travis.
 
-
+首先，根据上面”本地配置“部分对”本地配置“的描述确保 在迁移到一个类似Travis云系统之前 能运作起来。
 
 The main thing to consider is that since cloud instances are ephemeral and
 untrusted, you won't be leaving your credentials like your Play Store service
@@ -230,6 +236,8 @@ CI systems, such as [Travis](https://docs.travis-ci.com/user/environment-variabl
 or [Cirrus](https://cirrus-ci.org/guide/writing-tasks/#encrypted-variables)
 generally support encrypted environment variables to store private data.
 
+在CI系统中，像[Travis](https://docs.travis-ci.com/user/environment-variables/#Encrypting-environment-variables)和[Cirrus](https://cirrus-ci.org/guide/writing-tasks/#encrypted-variables)都支持通过加密的环境变量保持私有数据。
+
 
 
 
@@ -240,11 +248,13 @@ request that prints these secrets out. Be careful with interactions with these
 secrets in pull requests that you accept and merge.
 
 
+**特别注意不要在测试脚本将这些变量重新返回到控制台中。**这些变量在pull requests被合并之前都是中是不可读取的，以防止有人恶意创建一个新的拉取请求打印这些秘密数据。当接收和合并pull requests时记得小心对待这些秘密数据。
+
 
 
 1. Make login credentials ephemeral.
 
-
+使用登录临时证书
 
     * ![Android](/images/fastlane-cd/android.png) On Android:
         * Remove the `json_key_file` field from `Appfile` and store the string
@@ -252,12 +262,15 @@ secrets in pull requests that you accept and merge.
         `json_key_data` argument in `upload_to_play_store` to read the
         environment variable directly in your `Fastfile`.
 
-
+Android：
+替换`Appfile`中的`json_key_file`字段为在你的CI系统中变量加密后生成的JSON字符串内容。通过
+ `upload_to_play_store`的`json_key_data`参数直接读取你的`Fastfile`的环境变量。
 
         * Serialize your upload key (for example, using base64) and save it as
         an encrypted environment variable. You can deserialize it on your CI
         system during the install phase with
 
+序列化你的上传密钥（比如可以用Base64）并将其保存为加密后的环境变量。你可以在CI系统安装时期反通过以下命令序列化它。
 
         ```bash
         echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > /home/travis/[directory and filename specified in your gradle].keystore
@@ -267,15 +280,17 @@ secrets in pull requests that you accept and merge.
 
     * ![iOS](/images/fastlane-cd/ios.png) On iOS:
 
-
+iOS：
         * Move the local environment variable `FASTLANE_PASSWORD` to use
         encrypted environment variables on the CI system
 .
-
+替换`FASTLANE_PASSWORD`本地环境变量，使用CI系统加密后的环境变量。
 
         * The CI system needs access to your distribution certificate. Fastlane's
         [Match](https://docs.fastlane.tools/actions/match/) system is
         recommended to synchronize your certificates across machines.
+
+CI系统需要你发行证书的权限。推荐使用Fastlane的[Match](https://docs.fastlane.tools/actions/match/)系统在不同机器之间同步你的证书。
 
 
 
@@ -284,11 +299,13 @@ secrets in pull requests that you accept and merge.
 `gem install fastlane` on the CI system each time to ensure the Fastlane
 dependencies are stable and reproducible between local and cloud machines. However, this step is optional.
 
+推荐使用Gemfile来确保Fastlane在本地和在云端机器上的依赖是稳定和可重复的，而不是每次都重新`gem install fastlane`来在不同的CI系统部署。然而，这个步骤是并不是强制的。
+
 
     * In both your `[project]/android` and `[project]/ios` folders, create a
     `Gemfile` containing the following content:
 
-
+无论在Android `[project]/android`的目录下还是 iOS `[project]/ios`的目录下，创建一个`Gemfile`都要包含以下内容：
       ```
       source "https://rubygems.org"
 
@@ -299,8 +316,9 @@ dependencies are stable and reproducible between local and cloud machines. Howev
     * In both directories, run `bundle update` and check both `Gemfile` and
     `Gemfile.lock` into source control.
 
-在两个目录中，运行`bundle update`并检查`Gemfile`和
-`Gemfile.lock`两个文件进入源代码管理。
+在上面的目录下，运行`bundle update`并提交 `Gemfile` 和`Gemfile.lock`到版本控制。
+
+ 
 
 
 
